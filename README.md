@@ -316,7 +316,7 @@ The `xcursor_extractor` is a custom C utility that:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/cinnamon-settings-manager.git
+git clone https://github.com/crojack/cinnamon-settings-manager.git
 cd cinnamon-settings-manager
 
 # Install dependencies (see Installation section)
