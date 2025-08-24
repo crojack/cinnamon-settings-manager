@@ -677,11 +677,11 @@ package DesktopBackgroundsManager {
     sub _populate_background_directories {
         my $self = shift;
 
-        # Default wallpaper directories - reordered with Linuxmint first
+        # Default wallpaper directories - only directories that actually contain wallpapers
         my @default_dirs = (
-            { name => 'Linuxmint', path => '/usr/share/backgrounds/linuxmint' },
-            { name => 'System Wallpapers', path => '/usr/share/backgrounds' },
             { name => 'Pictures', path => $ENV{HOME} . '/Pictures' },
+            { name => 'Linux Mint', path => '/usr/share/backgrounds/linuxmint' },
+            { name => 'Linux Mint Wallpapers', path => '/usr/share/backgrounds/linuxmint-wallpapers' },
         );
 
         # Add default directories
@@ -833,7 +833,7 @@ package DesktopBackgroundsManager {
             my @files = grep { /\.(jpg|jpeg|png|bmp|gif|webp|tiff|tif)$/i } readdir($dh);
             closedir($dh);
 
-            # Sort files naturally - FIXED to eliminate warnings
+            # Sort files naturally
             @files = sort {
                 my ($a_name, $a_num);
                 if ($a =~ /^(.*?)(\d+)/) {
@@ -1122,7 +1122,7 @@ package DesktopBackgroundsManager {
             my @keys = keys %$cache;
             my $to_remove = @keys - $max_cache_items;
 
-            # FIXED: Only run loop if there are actually items to remove
+            # Only run loop if there are actually items to remove
             if ($to_remove > 0) {
                 for my $i (0..$to_remove-1) {
                     delete $cache->{$keys[$i]};
