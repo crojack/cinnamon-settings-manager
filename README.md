@@ -9,23 +9,20 @@ A modern, comprehensive settings management suite for Linux Mint Cinnamon deskto
 
 ## Overview
 
-Cinnamon Settings Manager is a collection of specialized configuration tools that provide an intuitive interface for managing various aspects of your Cinnamon desktop environment. Unlike the standard system settings, these tools offer advanced features, better organization, and enhanced user experience.
+Cinnamon Settings Manager is a collection of specialized configuration tools that provide an interface for managing various aspects of your Cinnamon desktop environment. It has a little bit different module organisation than the original Linux Mint Cinnamon system settings.  
 
 ## Features
 
-### **Theme Management Suite**
-- **Cinnamon Theme Manager** - Preview and apply Cinnamon desktop themes with real-time previews
-- **Application Theme Manager** - Manage GTK themes for applications with live preview
+- **Cinnamon Theme Manager** - Preview and apply Cinnamon desktop themes 
+- **Application Theme Manager** - Preview and apply GTK themes for applications
 - **Icon Theme Manager** - Browse and switch between icon themes with comprehensive previews
 - **Cursor Theme Manager** - Advanced cursor theme management with extracted cursor previews
-
-### **Visual Customization**
-- **Background Manager** - Advanced wallpaper management with thumbnail previews
+- **Background Manager** - Wallpaper management with thumbnail previews
 - **Font Manager** - System font management with live preview capabilities
 
 ### **Main Settings Manager**
-- Unified interface for all system settings
-- Enhanced search functionality
+- Unified interface for all main appearance system settings
+- Search functionality
 - Organized category-based navigation
 - Integration with system configuration tools
 
@@ -62,7 +59,7 @@ The installation script automatically:
 
 ### Custom Application Icon
 
-If you have created a custom icon for the main Cinnamon Settings Manager application:
+I have created a svg application icon but if you don't like it and if you have created a custom icon for the main Cinnamon Settings Manager application:
 
 1. **Place your SVG icon file** as `cinnamon-settings-manager.svg` in the project root directory (recommended)
 2. **Alternative PNG format**: Use `cinnamon-settings-manager.png` for a 64x64 pixel icon
@@ -120,7 +117,7 @@ sudo pacman -S base-devel pkgconf libxcursor libpng
 
 ```bash
 # Ubuntu/Debian/Linux Mint
-sudo apt install libgtk3-perl libjson-perl libmoo-perl
+sudo apt install libgtk3-perl libjson-perl libmoo-perl cpanminus
 
 # Fedora
 sudo dnf install perl-Gtk3 perl-JSON perl-Moo
@@ -129,8 +126,8 @@ sudo dnf install perl-Gtk3 perl-JSON perl-Moo
 sudo pacman -S perl-gtk3 perl-json
 # For Moo: install from AUR or CPAN
 
-# Via CPAN (universal)
-cpan Gtk3 JSON Moo
+# Via CPANM (universal)
+sudo cpanm Gtk3 JSON Moo
 ```
 
 #### Manual Compilation and Installation
@@ -212,26 +209,27 @@ Look for the applications in your system's application menu under the "Settings"
 #### Theme Managers
 - **Live Previews**: See themes before applying them
 - **Multiple Sources**: Scan system and user theme directories
-- **Installation Support**: Install themes directly from the interface
 - **Theme Information**: View theme details and metadata
+- **Zoom Control**: Adjustable preview sizes
 
 #### Cursor Theme Manager
 - **Advanced Preview**: Extract and display actual cursor shapes
 - **Multiple Cursors**: Preview different cursor types (arrow, hand, text, etc.)
-- **Batch Operations**: Install themes to user directories
 - **Cache Management**: Efficient thumbnail caching system
+- **Zoom Control**: Adjustable preview sizes
 
 #### Background Manager
 - **Thumbnail Grid**: Visual browsing of wallpapers
 - **Multiple Formats**: Support for various image formats
 - **Custom Directories**: Add your own wallpaper folders
-- **Zoom Control**: Adjustable thumbnail sizes
+- **Zoom Control**: Adjustable preview sizes
 
 #### Font Manager
 - **Live Preview**: See fonts rendered with sample text
 - **System Integration**: Works with system font configuration
 - **Custom Sample Text**: Use your own preview text
 - **Font Information**: Display font family and style details
+- **Zoom Control**: Adjustable preview sizes
 
 ## Configuration
 
@@ -296,6 +294,7 @@ The `xcursor_extractor` is a custom C utility that:
 - GTK3 development libraries
 - libXcursor and libpng development libraries
 - GCC compiler
+- cpanminus for fetching Perl modules
 
 ### Building from Source
 
@@ -333,7 +332,7 @@ Contributions are welcome! Please feel free to submit pull requests, report bugs
 
 **Perl module missing:**
 - Install missing modules using your distribution's package manager
-- Alternatively, use CPAN: `cpan Module::Name`
+- Alternatively, use CPAN: `cpanm Module::Name`
 
 **Applications don't appear in menu:**
 - Run `update-desktop-database ~/.local/share/applications`
