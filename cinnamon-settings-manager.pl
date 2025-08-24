@@ -42,6 +42,9 @@ package CinnamonSettingsManager;
         $self->_initialize_categories();
         $self->_setup_ui();
         $self->_load_default_category();
+                
+        # Debug: Show distribution info
+        $self->_show_distribution_info();
     }
 
     sub run {
@@ -749,6 +752,15 @@ package CinnamonSettingsManager;
 
         # Map module IDs to actual Cinnamon settings commands
         my %module_commands = (
+                    
+            # Distribution-aware commands
+            'input_method' => $self->_get_input_method_command(),
+            'languages' => $self->_get_languages_command(),
+            'driver_manager' => $self->_get_driver_manager_command(),
+            'software_sources' => $self->_get_software_sources_command(),
+            'firewall' => $self->_get_firewall_command(),
+            'login_window' => $self->_get_login_window_command(),
+                        
             # Appearance
             'themes' => 'cinnamon-settings themes',
             'effects' => 'cinnamon-settings effects',
@@ -814,32 +826,36 @@ package CinnamonSettingsManager;
             'system_info' => 'cinnamon-settings info'
         );
 
-        my $command = $module_commands{$module->{id}};
+    my $command = $module_commands{$module->{id}};
 
-        if ($command) {
-            print "Executing: $command\n";
-            
-            # Special handling for pkexec commands - use shell intermediary
-            if ($command =~ /^pkexec\s/) {
-                # Use sh -c to create an intermediary shell process
-                my $shell_command = "sh -c '$command' &";
-                system($shell_command);
-            } else {
-                system("$command &");
-            }
+    if ($command) {
+        print "Executing: $command\n";
+        
+        # Special handling for pkexec commands
+        if ($command =~ /^pkexec\s/) {
+            my $shell_command = "sh -c '$command' &";
+            system($shell_command);
         } else {
-            # Show dialog for modules without commands
-            my $dialog = Gtk3::MessageDialog->new(
-                $self->window,
-                'modal',
-                'info',
-                'ok',
-                "Module not available: " . $module->{name} . "\n\n" .
-                "This module may not be installed on your system or may require " .
-                "a different application to configure."
-            );
-            $dialog->run();
-            $dialog->destroy();
+            system("$command &");
+        }
+    } else {
+        # Show dialog for unavailable modules
+        my $distro = $self->_detect_distribution();
+        my $distro_name = ucfirst($distro);
+        
+        my $dialog = Gtk3::MessageDialog->new(
+            $self->window,
+            'modal',
+            'info',
+            'ok',
+            "Module not available: " . $module->{name} . "\n\n" .
+            "This module is not available on $distro_name or the required " .
+            "application is not installed on your system.\n\n" .
+            "Some modules are distribution-specific and may not work " .
+            "on all Linux distributions."
+        );
+        $dialog->run();
+        $dialog->destroy();
         }
     }
 
@@ -945,6 +961,179 @@ package CinnamonSettingsManager;
         $row->add($box);
         
         return $row;
+    }
+        
+    sub _detect_distribution {
+        my $self = shift;
+        
+        # Check for distribution-specific files
+        if (-f '/etc/fedora-release') {
+            return 'fedora';
+        } elsif (-f '/etc/redhat-release') {
+            return 'redhat';
+        } elsif (-f '/etc/centos-release') {
+            return 'centos';
+        } elsif (-f '/etc/debian_version') {
+            if (-f '/etc/lsb-release') {
+                # Could be Ubuntu or Linux Mint
+                my $lsb_content = `cat /etc/lsb-release 2>/dev/null`;
+                if ($lsb_content =~ /Ubuntu/i) {
+                    return 'ubuntu';
+                } elsif ($lsb_content =~ /LinuxMint/i) {
+                    return 'linuxmint';
+                }
+            }
+            return 'debian';
+        } elsif (-f '/etc/arch-release') {
+            return 'arch';
+        } elsif (-f '/etc/opensuse-release' || -f '/etc/SUSE-release') {
+            return 'suse';
+        } else {
+            return 'unknown';
+        }
+    }
+        
+    sub _get_input_method_command {
+        my $self = shift;
+        my $distro = $self->_detect_distribution();
+        
+        if ($distro eq 'fedora' || $distro eq 'redhat' || $distro eq 'centos') {
+            # Check which input method system is available
+            if (system("which ibus-setup >/dev/null 2>&1") == 0) {
+                return 'ibus-setup';
+            } elsif (system("which im-chooser >/dev/null 2>&1") == 0) {
+                return 'im-chooser';
+            }
+        } elsif ($distro eq 'ubuntu' || $distro eq 'linuxmint' || $distro eq 'debian') {
+            if (system("which im-config >/dev/null 2>&1") == 0) {
+                return 'im-config';
+            }
+        } elsif ($distro eq 'arch') {
+            return 'ibus-setup';
+        }
+        
+        return undef; # Command not available
+    }
+
+    sub _get_languages_command {
+        my $self = shift;
+        my $distro = $self->_detect_distribution();
+        
+        if ($distro eq 'fedora' || $distro eq 'redhat' || $distro eq 'centos') {
+            if (system("which gnome-control-center >/dev/null 2>&1") == 0) {
+                return 'gnome-control-center region';
+            }
+        } elsif ($distro eq 'ubuntu' || $distro eq 'linuxmint' || $distro eq 'debian') {
+            if (system("which gnome-language-selector >/dev/null 2>&1") == 0) {
+                return 'gnome-language-selector';
+            }
+        } elsif ($distro eq 'arch') {
+            return 'gnome-control-center region';
+        }
+        
+        return undef;
+    }
+
+    sub _get_driver_manager_command {
+        my $self = shift;
+        my $distro = $self->_detect_distribution();
+        
+        if ($distro eq 'linuxmint') {
+            return 'driver-manager';
+        } elsif ($distro eq 'ubuntu') {
+            if (system("which software-properties-gtk >/dev/null 2>&1") == 0) {
+                return 'software-properties-gtk --open-tab=4';  # Opens Additional Drivers tab
+            }
+        } elsif ($distro eq 'fedora' || $distro eq 'redhat' || $distro eq 'centos') {
+            # Fedora doesn't have a dedicated driver manager GUI like Ubuntu
+            # Users typically handle this through dnf or GNOME Software
+            return undef;
+        }
+        
+        return undef;
+    }
+
+    sub _get_software_sources_command {
+        my $self = shift;
+        my $distro = $self->_detect_distribution();
+        
+        if ($distro eq 'ubuntu' || $distro eq 'linuxmint' || $distro eq 'debian') {
+            if (system("which software-properties-gtk >/dev/null 2>&1") == 0) {
+                return 'software-properties-gtk';
+            }
+        } elsif ($distro eq 'fedora' || $distro eq 'redhat' || $distro eq 'centos') {
+            # Fedora uses yum.repos.d files, no GUI equivalent
+            # Could open the directory in file manager
+            return 'nautilus /etc/yum.repos.d';
+        } elsif ($distro eq 'arch') {
+            return 'nautilus /etc/pacman.conf';
+        }
+        
+        return undef;
+    }
+
+    sub _get_firewall_command {
+        my $self = shift;
+        my $distro = $self->_detect_distribution();
+        
+        if ($distro eq 'fedora' || $distro eq 'redhat' || $distro eq 'centos') {
+            if (system("which firewall-config >/dev/null 2>&1") == 0) {
+                return 'firewall-config';
+            }
+        } elsif ($distro eq 'ubuntu' || $distro eq 'linuxmint' || $distro eq 'debian') {
+            if (system("which gufw >/dev/null 2>&1") == 0) {
+                return 'gufw';
+            }
+        } elsif ($distro eq 'arch') {
+            if (system("which gufw >/dev/null 2>&1") == 0) {
+                return 'gufw';
+            }
+        }
+        
+        return undef;
+    }
+
+    sub _get_login_window_command {
+        my $self = shift;
+        my $distro = $self->_detect_distribution();
+        
+        if ($distro eq 'linuxmint') {
+            return 'pkexec lightdm-settings';
+        } elsif ($distro eq 'ubuntu' || $distro eq 'debian') {
+            if (system("which lightdm-gtk-greeter-settings >/dev/null 2>&1") == 0) {
+                return 'pkexec lightdm-gtk-greeter-settings';
+            }
+        } elsif ($distro eq 'fedora' || $distro eq 'redhat' || $distro eq 'centos') {
+            # Fedora typically uses GDM, which has limited customization options
+            if (system("which gnome-control-center >/dev/null 2>&1") == 0) {
+                return 'gnome-control-center user-accounts';
+            }
+        }
+        
+        return undef;
+    }
+
+    sub _show_distribution_info {
+        my $self = shift;
+        
+        my $distro = $self->_detect_distribution();
+        print "Detected distribution: $distro\n";
+        
+        # Show available commands for debugging
+        my %commands = (
+            'input_method' => $self->_get_input_method_command(),
+            'languages' => $self->_get_languages_command(),
+            'driver_manager' => $self->_get_driver_manager_command(),
+            'software_sources' => $self->_get_software_sources_command(),
+            'firewall' => $self->_get_firewall_command(),
+            'login_window' => $self->_get_login_window_command(),
+        );
+        
+        print "Available distribution-specific commands:\n";
+        foreach my $module (keys %commands) {
+            my $cmd = $commands{$module} || 'NOT AVAILABLE';
+            print "  $module: $cmd\n";
+        }
     }
 
 # Main execution
