@@ -9,7 +9,7 @@ A modern, comprehensive settings management suite for Linux Mint Cinnamon deskto
 
 ## Overview
 
-Cinnamon Settings Manager is a collection of specialized configuration tools that provide an interface for managing various aspects of your Cinnamon desktop environment. It has a little bit different module organisation than the original Linux Mint Cinnamon system settings. 
+Cinnamon Settings Manager is a collection of specialized configuration tools that provides an interface for managing various aspects of your Cinnamon desktop environment. It has a slightly different module organization than the original Linux Mint Cinnamon system settings
 
 ### **Main Settings Manager**
 - Unified interface for all main appearance system settings
