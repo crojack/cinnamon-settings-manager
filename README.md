@@ -9,16 +9,7 @@ A modern, comprehensive settings management suite for Linux Mint Cinnamon deskto
 
 ## Overview
 
-Cinnamon Settings Manager is a collection of specialized configuration tools that provide an interface for managing various aspects of your Cinnamon desktop environment. It has a little bit different module organisation than the original Linux Mint Cinnamon system settings.  
-
-## Features
-
-- **Cinnamon Theme Manager** - Preview and apply Cinnamon desktop themes 
-- **Application Theme Manager** - Preview and apply GTK themes for applications
-- **Icon Theme Manager** - Browse and switch between icon themes with comprehensive previews
-- **Cursor Theme Manager** - Advanced cursor theme management with extracted cursor previews
-- **Background Manager** - Wallpaper management with thumbnail previews
-- **Font Manager** - System font management with live preview capabilities
+Cinnamon Settings Manager is a collection of specialized configuration tools that provide an interface for managing various aspects of your Cinnamon desktop environment. It has a little bit different module organisation than the original Linux Mint Cinnamon system settings. 
 
 ### **Main Settings Manager**
 - Unified interface for all main appearance system settings
@@ -26,9 +17,34 @@ Cinnamon Settings Manager is a collection of specialized configuration tools tha
 - Organized category-based navigation
 - Integration with system configuration tools
 
-## Screenshots
+<img width="3573" height="2152" alt="Screenshot from 2025-08-24-19-51-21" src="https://github.com/user-attachments/assets/6b138b67-ad39-402f-8c09-9ceb0fa43c0f" />
 
-*Screenshots will be added in future releases*
+
+## Features
+
+- **Cinnamon Theme Manager** - Preview and apply Cinnamon desktop themes
+<img width="3565" height="2152" alt="Screenshot from 2025-08-24-19-49-20" src="https://github.com/user-attachments/assets/68b17956-1f7a-4fa3-b097-f37262733a7e" />
+
+
+- **Application Theme Manager** - Preview and apply GTK themes for applications
+<img width="3565" height="2152" alt="Screenshot from 2025-08-24-19-48-14" src="https://github.com/user-attachments/assets/b9de62c9-cbba-4ecb-9d54-cc6758f69155" />
+
+
+- **Icon Theme Manager** - Browse and switch between icon themes with comprehensive previews
+<img width="3565" height="2152" alt="Screenshot from 2025-08-24-19-49-00" src="https://github.com/user-attachments/assets/f6b603f3-6c46-4330-a450-78abed335fc3" />
+
+
+- **Cursor Theme Manager** - Advanced cursor theme management with extracted cursor previews
+<img width="3565" height="2152" alt="Screenshot from 2025-08-24-19-47-12" src="https://github.com/user-attachments/assets/2c78285a-3b0c-4aaf-a23b-fc1add463028" />
+
+
+- **Background Manager** - Wallpaper management with thumbnail previews
+<img width="3565" height="2152" alt="Screenshot from 2025-08-24-19-46-24" src="https://github.com/user-attachments/assets/1deb7dc2-e098-449a-92b6-587b42117560" />
+
+
+- **Font Manager** - System font management with live preview capabilities
+<img width="3565" height="2152" alt="Screenshot from 2025-08-24-19-46-50" src="https://github.com/user-attachments/assets/b6db225e-df44-48ac-8943-ffaa1d2f495e" />
+
 
 ## Installation
 
