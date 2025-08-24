@@ -54,7 +54,7 @@ The easiest way to install Cinnamon Settings Manager is using the automated inst
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/cinnamon-settings-manager.git
+git clone https://github.com/crojack/cinnamon-settings-manager.git
 cd cinnamon-settings-manager
 
 # Make the install script executable
