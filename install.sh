@@ -218,7 +218,15 @@ install_files() {
         fi
     done
 
-    # Make sure PATH includes ~/.local/bin
+    # Copy custom icons if they exist
+    if [ -d "icons" ]; then
+        print_info "Installing custom icons..."
+        cp -r icons/* "$DATA_DIR/icons/"
+        print_success "Custom icons installed"
+    else
+        print_info "No custom icons directory found, using system icons"
+    fi
+
     if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
         print_info "Adding ~/.local/bin to PATH in ~/.bashrc"
         echo "" >> "$HOME/.bashrc"
@@ -243,7 +251,8 @@ setup_desktop_entries() {
 
     # Export for use in create_desktop_entries function
     for key in "${!desktop_entries[@]}"; do
-        export "DESKTOP_${key^^//-/_}"="${desktop_entries[$key]}"
+        local safe_key="${key//-/_}" 
+		export "DESKTOP_${safe_key^^}"="${desktop_entries[$key]}"
     done
 }
 
@@ -296,6 +305,36 @@ install_application_icon() {
         fi
     fi
 }
+
+
+# Create individual desktop entry
+create_desktop_entry() {
+    local app_id="$1"
+    local app_name="$2" 
+    local app_comment="$3"
+    local app_icon="$4"
+    local app_keywords="$5"
+    
+    local desktop_file="$DESKTOP_DIR/${app_id}.desktop"
+    
+    cat > "$desktop_file" << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${app_name}
+Comment=${app_comment}
+Exec=$HOME/.local/bin/${app_id}.pl
+Icon=${app_icon}
+Terminal=false
+StartupNotify=true
+Categories=Settings;DesktopSettings;GTK;
+Keywords=${app_keywords}
+EOF
+    
+    chmod +x "$desktop_file"
+    print_success "Created desktop entry for ${app_name}"
+}
+
 
 # Create desktop entries
 create_desktop_entries() {
