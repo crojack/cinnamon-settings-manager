@@ -376,6 +376,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - GTK team for the excellent toolkit
 - X.Org foundation for the Xcursor library
 - libpng developers for PNG support
+- Icons artists for creating such beautiful Linux icons
 
 ## Changelog
 
