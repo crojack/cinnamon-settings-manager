@@ -61,7 +61,7 @@ This is the easiest and most reliable method:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/cinnamon-settings-manager.git
+git clone https://github.com/crojack/cinnamon-settings-manager.git
 cd cinnamon-settings-manager
 
 # 2. Run the automated installer
@@ -85,7 +85,7 @@ If you prefer using make:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/cinnamon-settings-manager.git
+git clone https://github.com/crojack/cinnamon-settings-manager.git
 cd cinnamon-settings-manager
 
 # 2. Check dependencies (optional)
