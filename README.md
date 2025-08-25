@@ -110,7 +110,7 @@ If you prefer to install manually, follow these steps:
 #### Prerequisites
 
 **System Requirements:**
-- Linux Mint with Cinnamon desktop environment
+- Linux Mint (or any other distribution) with Cinnamon desktop environment
 - GCC compiler
 - pkg-config
 - libXcursor development files
